@@ -28,6 +28,11 @@ function drawMatrix(matrix, offset) {
         });
     });
 }
+
+function playerDrop(){
+    player.pos.y++;
+    dropCounter = 0;
+}
 let dropCounter = 0;
 //1000 for milliseconds
 let dropInterval = 1000;
@@ -35,16 +40,11 @@ let lastTime = 0;
 
 function update(time = 0) {
     const deltaTime = time - lastTime;
-    console.log("deltaTime is " + deltaTime)
-    console.log("time is " + time);
-    console.log("lastTime is " + lastTime);
-
     lastTime = time;
     
     dropCounter += deltaTime;
     if (dropCounter > dropInterval) {
-        player.pos.y++;
-        dropCounter = 0;
+        playerDrop();
     }
 
     draw();
@@ -55,5 +55,19 @@ const player = {
     pos: {x: 2, y: 2},
     matrix: matrix
 }
+
+//Player controls, there is no 'up' control
+document.addEventListener('keydown', event => {
+    if (event.keyCode === 37) { //Left
+        player.pos.x--;
+        console.log("Left");
+    } else if (event.keyCode === 39) { //Right
+        player.pos.x++;
+        console.log("Right");
+    } else if (event.keyCode === 40) { //Down
+        playerDrop();
+        console.log("Down");
+    } 
+})
 
 update();
