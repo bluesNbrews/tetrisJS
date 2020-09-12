@@ -12,7 +12,7 @@ const matrix =[
     [0, 1, 0]
 ];
 
-//TODO
+//Check for a collision of a tetromino piece (player) with the the logical representation of pieces (arena)
 function collide(arena, player) {
     const [m, o] = [player.matrix, player.pos]
     for (let y = 0; y < m.length; ++y){
@@ -59,7 +59,7 @@ function drawMatrix(matrix, offset) {
     });
 }
 
-//TODO
+//Combine the tetromino piece (player) to the logical representation of pieces (arena)
 function merge(arena, player) {
     player.matrix.forEach((row, y) => {
         row.forEach((value, x) => {
@@ -73,11 +73,15 @@ function merge(arena, player) {
 //Move the tetromino position down one row
 function playerDrop(){
     player.pos.y++;
-    //TODO
+    //If there is a collision of the tetromino piece (player) with any other tetrominos in the logical representation of pieces (arena), 
+    //stop and add the tetromino (player) to the logical representation of pieces (arena) and reset to the top
     if (collide(arena, player)){
         player.pos.y--;
         merge(arena, player);
         player.pos.y = 0;
+        //For every collision, show the arena (after the merge) and show the player that was added
+        console.log(arena);
+        console.log(player);
     }
     //Reset drop counter
     dropCounter = 0;
@@ -103,6 +107,7 @@ function update(time = 0) {
     requestAnimationFrame(update);
 }
 
+//Create  matrix that has 12 columns and 20 rows
 const arena = createMatrix(12, 20);
 
 //Declare the "t" tetromino above and it's position (offset)
