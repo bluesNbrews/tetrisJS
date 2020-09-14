@@ -41,6 +41,9 @@ function createMatrix(w, h) {
 function draw() {
     context.fillStyle = "#000";
     context.fillRect(0,0,canvas.width,canvas.height);
+    
+    //Draw the logical representation of pieces (arena) and also the teromino piece (player)
+    drawMatrix(arena, {x: 0, y: 0});
     drawMatrix(player.matrix, player.pos);
 }
 
@@ -79,13 +82,20 @@ function playerDrop(){
         player.pos.y--;
         merge(arena, player);
         player.pos.y = 0;
-        //For every collision, show the arena (after the merge) and show the player that was added
-        console.log(arena);
-        console.log(player);
     }
     //Reset drop counter
     dropCounter = 0;
 }
+
+//Prevent overlap of tetromino piece and boundary of screen and / or other tertomino pieces 
+function playerMove(dir){
+    player.pos.x += dir;
+
+    if (collide(arena, player)) {
+        player.pos.x -= dir;
+    }
+}
+
 let dropCounter = 0;
 //1000 milliseconds (1 second)
 let dropInterval = 1000;
@@ -119,10 +129,10 @@ const player = {
 //Player controls, there is no 'up' control
 document.addEventListener('keydown', event => {
     if (event.keyCode === 37) { //Left
-        player.pos.x--;
+        playerMove(-1);
         console.log("Left");
     } else if (event.keyCode === 39) { //Right
-        player.pos.x++;
+        playerMove(1);
         console.log("Right");
     } else if (event.keyCode === 40) { //Down
         playerDrop();
