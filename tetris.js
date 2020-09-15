@@ -96,6 +96,41 @@ function playerMove(dir){
     }
 }
 
+function playerRotate(dir) {
+    let offset = 1;
+    rotate(player.matrix, dir);
+    while (collide(arena, player)) {
+        player.pos.x += offset;
+        offset = -(offset + (offset > 0 ? 1 : -1));
+        if (offset > player.matrix[0].length) {
+            rotate(player.matrix, -dir);
+            player.pos.x = pos;
+            return;
+        }
+   
+    }
+}
+
+function rotate(matrix, dir) {
+    for (let y = 0; y < matrix.length; ++y) {
+        for (let x = 0; x < y; ++x) {
+            [
+                matrix[x][y],
+                matrix[y][x]
+
+            ] = [
+                matrix[y][x],
+                matrix[x][y]
+            ];
+        }
+    }
+    if (dir > 0) {
+        matrix.forEach(row => row.reverse());
+    } else {
+        matrix.reverse();
+    }
+}
+
 let dropCounter = 0;
 //1000 milliseconds (1 second)
 let dropInterval = 1000;
@@ -126,7 +161,7 @@ const player = {
     matrix: matrix
 }
 
-//Player controls, there is no 'up' control
+//Player controls on the keyboard, there is no 'up' control
 document.addEventListener('keydown', event => {
     if (event.keyCode === 37) { //Left
         playerMove(-1);
@@ -137,7 +172,13 @@ document.addEventListener('keydown', event => {
     } else if (event.keyCode === 40) { //Down
         playerDrop();
         console.log("Down");
-    } 
+    } else if (event.keyCode == 81) { //Q
+        playerRotate(-1);
+        console.log("Rotate Left");
+    } else if (event.keyCode == 87) { //W
+        playerRotate(1);
+        console.log("Rotate Right");
+    }
 })
 
 //Start the game
