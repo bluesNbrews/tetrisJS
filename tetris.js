@@ -87,15 +87,17 @@ function playerDrop(){
     dropCounter = 0;
 }
 
-//Prevent overlap of tetromino piece and boundary of screen and / or other tertomino pieces 
+//Prevent overlap of tetromino piece and boundary of screen (left/right) and/or other tertomino pieces 
 function playerMove(dir){
     player.pos.x += dir;
 
+    //If a collision occurs, move back to previous position before collision
     if (collide(arena, player)) {
         player.pos.x -= dir;
     }
 }
 
+//This function detects collision with the boundary of screen (left/right) when rotating the tetromino piece
 function playerRotate(dir) {
     let offset = 1;
     rotate(player.matrix, dir);
@@ -111,9 +113,14 @@ function playerRotate(dir) {
     }
 }
 
+//Passes in 1 for right and -1 for left as the direction
+//Two steps to get a rotated matrix
+//1) transpose the matrix - convert all rows into columns
+//2) Reverse the row based on direction
 function rotate(matrix, dir) {
     for (let y = 0; y < matrix.length; ++y) {
         for (let x = 0; x < y; ++x) {
+            //Instead of using temp to switch, just do it directly
             [
                 matrix[x][y],
                 matrix[y][x]
