@@ -4,13 +4,10 @@ const canvas = document.getElementById("tetris");
 const context = canvas.getContext("2d");
 context.scale(20, 20);
 
+//TODO add comments
 //Experiment with the "t" tetromino
 //A value of 1 shows the shape
-const matrix =[
-    [0, 0, 0],
-    [1, 1, 1],
-    [0, 1, 0]
-];
+//const matrix =
 
 //Check for a collision of a tetromino piece (player) with the the logical representation of pieces (arena)
 function collide(arena, player) {
@@ -35,6 +32,53 @@ function createMatrix(w, h) {
         matrix.push(new Array(w).fill(0));
     }
     return matrix;
+}
+
+//TODO Add comments for this
+function createPiece(type) {
+    if (type === "T") {
+        return [
+            [0, 0, 0],
+            [1, 1, 1],
+            [0, 1, 0]
+        ];
+    } else if (type === "O") {
+        return [
+            [1, 1,],
+            [1, 1,]
+        ];
+    } else if (type === "L") {
+        return [
+            [0, 1, 0],
+            [0, 1, 0],
+            [0, 1, 1]
+        ];
+    } else if (type === "J") {
+        return [
+            [0, 1, 0],
+            [0, 1, 0],
+            [1, 1, 0]
+        ];
+    } else if (type === "I") {
+        return [
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0]
+        ];
+    } else if (type === "S") {
+        return [
+            [0, 1, 1],
+            [1, 1, 0],
+            [0, 0, 0]
+        ];
+    } else if (type === "Z") {
+        return [
+            [1, 1, 0],
+            [0, 1, 1],
+            [0, 0, 0]
+        ];
+    }
 }
 
 //Fill the context space with a black rectangle and draw the matrix
@@ -81,7 +125,8 @@ function playerDrop(){
     if (collide(arena, player)){
         player.pos.y--;
         merge(arena, player);
-        player.pos.y = 0;
+        playerReset();
+        //player.pos.y = 0;
     }
     //Reset drop counter
     dropCounter = 0;
@@ -95,6 +140,15 @@ function playerMove(dir){
     if (collide(arena, player)) {
         player.pos.x -= dir;
     }
+}
+
+//TODO Add comments for this
+function playerReset() {
+    const pieces = 'TOLJISZ';
+    player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+    player.pos.y = 0;
+    player.pos.x = (arena[0].length / 2 | 0) -
+                   (player.matrix[0].length /2 | 0);
 }
 
 //This function detects collision with the boundary of screen (left/right) when rotating the tetromino piece
@@ -162,10 +216,11 @@ function update(time = 0) {
 //Create  matrix that has 12 columns and 20 rows
 const arena = createMatrix(12, 20);
 
+//TODO Add comments
 //Declare the "t" tetromino above and it's position (offset)
 const player = {
     pos: {x: 2, y: 2},
-    matrix: matrix
+    matrix: createPiece('T')
 }
 
 //Player controls on the keyboard, there is no 'up' control
