@@ -4,11 +4,6 @@ const canvas = document.getElementById("tetris");
 const context = canvas.getContext("2d");
 context.scale(20, 20);
 
-//TODO add comments
-//Experiment with the "t" tetromino
-//A value of 1 shows the shape
-//const matrix =
-
 //Check for a collision of a tetromino piece (player) with the the logical representation of pieces (arena)
 function collide(arena, player) {
     const [m, o] = [player.matrix, player.pos]
@@ -34,7 +29,7 @@ function createMatrix(w, h) {
     return matrix;
 }
 
-//TODO Add comments for this
+//Select the correct tetromino piece depending on the given parameter
 function createPiece(type) {
     if (type === "T") {
         return [
@@ -142,10 +137,11 @@ function playerMove(dir){
     }
 }
 
-//TODO Add comments for this
+//Randomly create a new tetromino piece and reset the position to the top of the screen
 function playerReset() {
     const pieces = 'TOLJISZ';
     player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+    //Place in th middle of the screen at the top
     player.pos.y = 0;
     player.pos.x = (arena[0].length / 2 | 0) -
                    (player.matrix[0].length /2 | 0);
@@ -216,8 +212,7 @@ function update(time = 0) {
 //Create  matrix that has 12 columns and 20 rows
 const arena = createMatrix(12, 20);
 
-//TODO Add comments
-//Declare the "t" tetromino above and it's position (offset)
+//Declare the "t" tetromino (initially) and it's position (offset)
 const player = {
     pos: {x: 2, y: 2},
     matrix: createPiece('T')
