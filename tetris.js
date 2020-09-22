@@ -121,7 +121,6 @@ function playerDrop(){
         player.pos.y--;
         merge(arena, player);
         playerReset();
-        //player.pos.y = 0;
     }
     //Reset drop counter
     dropCounter = 0;
@@ -145,6 +144,10 @@ function playerReset() {
     player.pos.y = 0;
     player.pos.x = (arena[0].length / 2 | 0) -
                    (player.matrix[0].length /2 | 0);
+    if (collide(arena, player)) {
+        arena.forEach(row => row.fill(0));
+        console.log("Game over :(");
+    }
 }
 
 //This function detects collision with the boundary of screen (left/right) when rotating the tetromino piece
