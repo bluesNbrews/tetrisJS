@@ -4,6 +4,25 @@ const canvas = document.getElementById("tetris");
 const context = canvas.getContext("2d");
 context.scale(20, 20);
 
+//TODO
+function arenaSweep() {
+    let rowCount = 1;
+    outer: for (let y = arena.length - 1; y > 0; --y) {
+        for (let x = 0; x < arena[y].length; ++x) {
+            if (arena[y][x] == 0) {
+                continue outer;
+            }
+        }
+
+        const row = arena.splice(y, 1)[0].fill(0);
+        arena.unshift(row);
+        ++y;
+
+        player.score += rowCount * 10;
+        rowCount *= 2;
+    }
+}
+
 //Check for a collision of a tetromino piece (player) with the the logical representation of pieces (arena)
 function collide(arena, player) {
     const [m, o] = [player.matrix, player.pos]
@@ -113,6 +132,7 @@ function merge(arena, player) {
     });
 }
 
+//TODO
 //Move the tetromino position down one row
 function playerDrop(){
     player.pos.y++;
@@ -122,6 +142,8 @@ function playerDrop(){
         player.pos.y--;
         merge(arena, player);
         playerReset();
+        arenaSweep();
+        updateScore();
     }
     //Reset drop counter
     dropCounter = 0;
@@ -137,6 +159,7 @@ function playerMove(dir){
     }
 }
 
+//TODO
 //Randomly create a new tetromino piece and reset the position to the top of the screen
 function playerReset() {
     const pieces = 'TOLJISZ';
@@ -148,6 +171,8 @@ function playerReset() {
     if (collide(arena, player)) {
         arena.forEach(row => row.fill(0));
         console.log("Game over :(");
+        player.score = 0;
+        updateScore();
     }
 }
 
@@ -213,6 +238,10 @@ function update(time = 0) {
     requestAnimationFrame(update);
 }
 
+function updateScore() {
+    document.getElementById('score').innerText = player.score;
+}
+
 //Create a specific colors array that will map to tetromino pieces
 const colors = [
     null,
@@ -228,10 +257,12 @@ const colors = [
 //Create  matrix that has 12 columns and 20 rows
 const arena = createMatrix(12, 20);
 
+//TODO
 //Declare the "t" tetromino (initially) and it's position (offset)
 const player = {
-    pos: {x: 2, y: 2},
-    matrix: createPiece('T')
+    pos: {x: 0, y: 0},
+    matrix: null,
+    score: 0
 }
 
 //Player controls on the keyboard, there is no 'up' control
@@ -254,5 +285,8 @@ document.addEventListener('keydown', event => {
     }
 })
 
+//TODO
+playerReset();
+updateScore();
 //Start the game
 update();
