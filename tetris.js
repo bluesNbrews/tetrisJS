@@ -30,6 +30,7 @@ function createMatrix(w, h) {
 }
 
 //Select the correct tetromino piece depending on the given parameter
+//Numbers will correspond to colors array, all tetromino pieces will be the same color every time
 function createPiece(type) {
     if (type === "T") {
         return [
@@ -39,38 +40,38 @@ function createPiece(type) {
         ];
     } else if (type === "O") {
         return [
-            [1, 1,],
-            [1, 1,]
+            [2, 2,],
+            [2, 2,]
         ];
     } else if (type === "L") {
         return [
-            [0, 1, 0],
-            [0, 1, 0],
-            [0, 1, 1]
+            [0, 3, 0],
+            [0, 3, 0],
+            [0, 3, 3]
         ];
     } else if (type === "J") {
         return [
-            [0, 1, 0],
-            [0, 1, 0],
-            [1, 1, 0]
+            [0, 4, 0],
+            [0, 4, 0],
+            [4, 4, 0]
         ];
     } else if (type === "I") {
         return [
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-            [0, 1, 0, 0],
-            [0, 1, 0, 0]
+            [0, 5, 0, 0],
+            [0, 5, 0, 0],
+            [0, 5, 0, 0],
+            [0, 5, 0, 0]
         ];
     } else if (type === "S") {
         return [
-            [0, 1, 1],
-            [1, 1, 0],
+            [0, 6, 6],
+            [6, 6, 0],
             [0, 0, 0]
         ];
     } else if (type === "Z") {
         return [
-            [1, 1, 0],
-            [0, 1, 1],
+            [7, 7, 0],
+            [0, 7, 7],
             [0, 0, 0]
         ];
     }
@@ -86,13 +87,13 @@ function draw() {
     drawMatrix(player.matrix, player.pos);
 }
 
-//For each value of 1 in the tetromino (shape definition), fill the context with a red square
-//This makes the shape of the specified tetromino
+//For each value of 1-7 in the tetromino (shape definition), fill the context with the color from the colors array
+//This makes the shape of the specified matrix to the screen
 function drawMatrix(matrix, offset) {
     matrix.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value !== 0) {
-                context.fillStyle = 'red';
+                context.fillStyle = colors[value];
                 context.fillRect(x + offset.x,
                                  y + offset.y, 
                                  1, 1);
@@ -126,7 +127,7 @@ function playerDrop(){
     dropCounter = 0;
 }
 
-//Prevent overlap of tetromino piece and boundary of screen (left/right) and/or other tertomino pieces 
+//Prevent overlap of tetromino piece and boundary of screen (left/right) and/or other tetromino pieces 
 function playerMove(dir){
     player.pos.x += dir;
 
@@ -211,6 +212,18 @@ function update(time = 0) {
     draw();
     requestAnimationFrame(update);
 }
+
+//Create a specific colors array that will map to tetromino pieces
+const colors = [
+    null,
+    '#FF0D72',
+    '#0DC2FF',
+    '#0DFF72',
+    '#F538FF',
+    '#FF8E0D',
+    '#FFE138',
+    '#3877FF'
+];
 
 //Create  matrix that has 12 columns and 20 rows
 const arena = createMatrix(12, 20);
