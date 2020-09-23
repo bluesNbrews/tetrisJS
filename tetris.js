@@ -1,10 +1,10 @@
 
-//Get the context from the element and make it larger
+//Get the context from the element and make it larger (scale)
 const canvas = document.getElementById("tetris");
 const context = canvas.getContext("2d");
 context.scale(20, 20);
 
-//TODO
+//This function will search for a full row. If found, remove the row and add the score
 function arenaSweep() {
     let rowCount = 1;
     outer: for (let y = arena.length - 1; y > 0; --y) {
@@ -14,6 +14,7 @@ function arenaSweep() {
             }
         }
 
+        console.log("Complete row!");
         const row = arena.splice(y, 1)[0].fill(0);
         arena.unshift(row);
         ++y;
@@ -49,7 +50,7 @@ function createMatrix(w, h) {
 }
 
 //Select the correct tetromino piece depending on the given parameter
-//Numbers will correspond to colors array, all tetromino pieces will be the same color every time
+//Numbers will correspond to colors array, all tetromino pieces of a specific type will be the same color every time
 function createPiece(type) {
     if (type === "T") {
         return [
@@ -132,7 +133,6 @@ function merge(arena, player) {
     });
 }
 
-//TODO
 //Move the tetromino position down one row
 function playerDrop(){
     player.pos.y++;
@@ -141,6 +141,7 @@ function playerDrop(){
     if (collide(arena, player)){
         player.pos.y--;
         merge(arena, player);
+
         playerReset();
         arenaSweep();
         updateScore();
@@ -159,7 +160,6 @@ function playerMove(dir){
     }
 }
 
-//TODO
 //Randomly create a new tetromino piece and reset the position to the top of the screen
 function playerReset() {
     const pieces = 'TOLJISZ';
@@ -168,10 +168,12 @@ function playerReset() {
     player.pos.y = 0;
     player.pos.x = (arena[0].length / 2 | 0) -
                    (player.matrix[0].length /2 | 0);
+    //If the screen fills up to the top, clear out and reset score (game over)
     if (collide(arena, player)) {
         arena.forEach(row => row.fill(0));
         console.log("Game over :(");
         player.score = 0;
+        //Updates score on webpage
         updateScore();
     }
 }
@@ -238,6 +240,7 @@ function update(time = 0) {
     requestAnimationFrame(update);
 }
 
+//Updates score on webpage
 function updateScore() {
     document.getElementById('score').innerText = player.score;
 }
@@ -257,8 +260,7 @@ const colors = [
 //Create  matrix that has 12 columns and 20 rows
 const arena = createMatrix(12, 20);
 
-//TODO
-//Declare the "t" tetromino (initially) and it's position (offset)
+//Declare the "t" tetromino (initially), it's position (offset), and the score value
 const player = {
     pos: {x: 0, y: 0},
     matrix: null,
@@ -285,8 +287,9 @@ document.addEventListener('keydown', event => {
     }
 })
 
-//TODO
+//Create a piece (currently null) and clear out the screen and score
 playerReset();
+//Updates score on webpage
 updateScore();
 //Start the game
 update();
