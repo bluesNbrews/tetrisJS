@@ -3,4 +3,4 @@ Tetris written in JavaScript!
 
 ## Beta in progress...
 
-![TutorialImage1](https://github.com/bluesNbrews/SkillSearchEngine/blob/master/img/tetris.png)
+![tetris](https://github.com/bluesNbrews/tetrisJS/blob/master/img/tetris.png)
